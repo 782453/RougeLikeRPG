@@ -8,14 +8,13 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 public class Main {
     static Player player = new Player("TEST_PLAYER", 0);
-    static int hp = 10, gold = 0, floor = 1;
+    static String location = "town";
     public static void main(String[] args) throws Exception {
         Terminal terminal = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(100, 35)).createTerminal();
         Screen screen = new TerminalScreen(terminal);
         screen.startScreen();
-        //Dungeon dungeon = new Dungeon();
-        //dungeon.start(player, screen);
+
         Town town = new Town();
-        town.start(player, screen);
+        town.start(player, screen, new int[]{16,0});
     }
 }

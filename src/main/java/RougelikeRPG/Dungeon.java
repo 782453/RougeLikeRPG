@@ -4,6 +4,7 @@ import com.googlecode.lanterna.TerminalSize;
 import com.googlecode.lanterna.TextColor;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
+import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 
 public class Dungeon implements MapLoop {
@@ -38,6 +39,12 @@ public class Dungeon implements MapLoop {
             screen.refresh();
 
             KeyStroke key = screen.readInput();
+            if (key.getKeyType() == KeyType.Escape) {
+                running = false;
+                Town town = new Town();
+                town.start(player, screen, new int[]{32,50});
+                break;
+            }
             running = player.movement(key,map,running); //Player move
             for (Enemy e : map.getEnemies()) { //Enemies move
                 e.EnemyAi(map, player);

@@ -34,8 +34,12 @@ public class Player extends Entity {
             if (c=='s') this.setNy(this.getN()[0] + 1);
             if (c=='a') this.setNx(this.getN()[1] - 1);
             if (c=='d') this.setNx(this.getN()[1] + 1);
-        }else if (key.getKeyType() == KeyType.Escape) running = false;
-        if (this.getN()[0] >= 0 && this.getN()[0] < map.getMapHeight() && this.getN()[1] >= 0 && this.getN()[1] < map.getMapWidth() && map.getTile(this.getN()[0], this.getN()[1]) !=  Tiles.WALL.getSymbol()) {
+        }
+        if (this.getN()[0] >= 0 && this.getN()[0] < map.getMapHeight() && this.getN()[1] >= 0 && this.getN()[1] < map.getMapWidth() &&
+                map.getTile(this.getN()[0], this.getN()[1]) !=  Tiles.WALL.getSymbol() &&
+                map.getTile(this.getN()[0], this.getN()[1]) !=  Tiles.RIVER.getSymbol() &&
+                map.getTile(this.getN()[0], this.getN()[1]) !=  Tiles.TREE.getSymbol() &&
+                map.getTile(this.getN()[0], this.getN()[1]) !=  '║') {
             this.setP(this.getN());
         }
         return running;
