@@ -1,155 +1,195 @@
-# ☻ Terminal Roguelike Dungeon Crawler
+# ⚔ RougelikeRPG
 
-A dungeon crawler that runs entirely in the terminal. Built in Java using the Lanterna library for rendering.
-Procedurally generated floors, turn-based combat, multiple enemy types, and a class system with unique skills.
+A turn-based terminal dungeon crawler built in Java using the [Lanterna](https://github.com/mabe02/lanterna) terminal UI library. Procedurally generated floors, multiple enemy types, class-based player stats, and a 10-floor dungeon with a boss waiting at the bottom.
 
----
-
-## Features
-
-- **Procedural generation** — Cellular automata dungeon generation for organic, cave-like floors
-- **10-floor dungeon** — Scales in difficulty, with Floor 10 reserved for a boss encounter
-- **Turn-based gameplay** — The game only updates on player input; no real-time pressure
-- **Three playable classes** — Warrior, Rogue, and Wizard, each with unique stats and a resource-based skill system
-- **Enemy AI** — Radius-based activation; enemies pursue the player within 10 tiles
-- **Speed tiers** — Different enemy types move at different rates, not every enemy moves every turn
-- **Town / overworld** — A town map with an Inn, Shop, Blacksmith, Town Hall, cave entrance, and forest entrance
-- **Status HUD** — Live display of HP, floor, attack, and defense
+Built as a portfolio project demonstrating OOP design, procedural generation, game loop architecture, and iterative development.
 
 ---
 
-## Controls
+## 📸 Features
+
+- **Procedural dungeon generation** via cellular automata — every floor is unique
+- **10-floor dungeon** with floor-scaled enemy difficulty
+- **3 playable classes** — Warrior, Rogue, Wizard — each with unique stats and skills
+- **3 enemy types** — Rat, Bat, Goblin — with radius-based AI and per-enemy speed tiers
+- **Town/overworld map** with Inn, Shop, Blacksmith, and Town Hall
+- **Ladder system** — touch the ladder to descend to the next generated floor
+- **Status bar HUD** showing HP, Gold, and current Floor
+- **Full WASD movement** with wall collision using a next-position (nx, ny) system
+
+---
+
+## 🎮 Controls
 
 | Key | Action |
 |-----|--------|
-| `W A S D` or Arrow Keys | Move / Bump attack |
-| `I` | Open inventory *(coming soon)* |
-| `U` | Use / equip item *(coming soon)* |
-| `Q` | Quit |
+| `W` | Move up |
+| `S` | Move down |
+| `A` | Move left |
+| `D` | Move right |
+| `Q` / `Esc` | Quit |
 
 ---
 
-## Classes
+## 🚀 How to Run
 
-| | ⚔ Warrior | 🗡 Rogue | 🔮 Wizard |
-|---|---|---|---|
-| Race | Dwarf | Elf | Human |
-| HP | High | Balanced | Balanced |
-| Defense | High | Balanced | Low |
-| Attack | Balanced | Balanced (×2 hit) | Highest |
-| Resource | 🔥 Wrath | 💨 Speed | 💧 Mana |
-
-Each class gains its resource passively each turn. Skills are activated mid-combat:
-
-- **Defensive skill** — Avoids or reduces incoming damage, grants resource
-- **Buff skill** — Temporary stat boost, grants resource
-- **Special skill** — Consumes all accumulated resource; more resource = stronger effect
-
-### Warrior
-| Skill | Effect |
-|-------|--------|
-| 🛡 Block | Greatly reduce incoming damage + gain Wrath |
-| 😡 Wrath | Double Wrath gain for 2 turns + Weaken enemy |
-| 🔥 Special | Consumes Wrath — more = stronger burst damage |
-
-### Rogue
-| Skill | Effect |
-|-------|--------|
-| 💨 Dodge | Avoid attack completely + gain Speed + inflict Bleeding (2 turns) |
-| 🎯 Focus | Gain more Speed for 2 turns + hit harder |
-| ⚡ Special | Consumes Speed — more = stronger multi-hit effect |
-
-### Wizard
-| Skill | Effect |
-|-------|--------|
-| 🌫 Invisibility | Avoid attack completely + gain Mana |
-| 🧘 Meditate | Recover HP + gain more Mana for 2 turns |
-| 💧 Special | Consumes Mana — more = stronger spell / AoE |
-
----
-
-## Enemies
-
-| Symbol | Name | Color | Notes |
-|--------|------|-------|-------|
-| `ω` | Bat | Purple | Fast, low HP |
-| `Φ` | Goblin | Green | Balanced stats |
-| `ρ` | Rat | Grey | Weak, early floors only |
-
-Enemies spawn in greater numbers and variety on deeper floors. Each enemy type has its own speed tier — not every enemy moves every turn.
-
----
-
-## Tech Stack
-
-- **Language:** Java (OOP)
-- **Terminal UI:** [Lanterna](https://github.com/mabe02/lanterna) (via Maven)
-- **IDE:** IntelliJ IDEA
-- **Font:** JetBrains Mono (required for correct Unicode symbol rendering)
-- **Build:** Maven
-
----
-
-## How to Run
-
-### Requirements
+### Prerequisites
 - Java 17+
 - Maven
 
 ### Steps
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git
-cd YOUR_REPO_NAME
+git clone https://github.com/YOUR_USERNAME/RougelikeRPG.git
+cd RougelikeRPG
 mvn compile
-mvn exec:java -Dexec.mainClass="com.yourpackage.Main"
+mvn exec:java -Dexec.mainClass="RougelikeRPG.Main"
 ```
 
-> **Note:** Run in a real terminal, not the IDE's built-in console, for correct rendering.  
-> On Windows, **Windows Terminal** works best. On Linux/macOS any standard terminal works.
+> **Recommended:** Run in IntelliJ IDEA with **JetBrains Mono** font for correct Unicode symbol rendering.
 
 ---
 
-## Architecture
+## 🗺 Maps
 
-```
-Entity (base)
-├── Player     — input, movement, class & resource system
-└── Enemy      — aiTurn(), speed tiers, symbol & color
+### Dungeon (34×100)
+Generated fresh each floor using **cellular automata**:
+1. Fill grid randomly based on a fill chance
+2. Run 7 iterations of neighbour-counting smoothing
+3. Remove small disconnected regions (BFS flood fill)
+4. Connect remaining regions with L-shaped tunnels
+5. Place a ladder (`≡`) at a random floor tile
 
-DungeonMap     — holds tile data only (cellular automata generation)
-Dungeon        — owns the game loop via start(Player, Screen)
-CombatSystem   — resolves attack(attacker, defender)
-Renderer       — draws map + entities via Lanterna
+Walls are rendered with depth-based shading — walls closer to open floor appear brighter, giving a sense of depth without a full lighting system.
 
-GameState (interface)
-├── MainMenuState
-├── OverworldState   — town map, NPC buildings
-├── DungeonState     — dungeon loop, enemies, combat
-├── GameOverState
-└── VictoryState
-```
-
-The **Game State pattern** keeps each area self-contained. Each state runs its own loop and returns the next state on transition — `Main` just calls `run()` in a loop.
-
----
-
-## Development Roadmap
-
-| Phase | Focus | Status |
-|-------|-------|--------|
-| Setup | Project, Maven, Lanterna, GitHub | ✅ Done |
-| Phase 1 | Static map rendering | ✅ Done |
-| Phase 2 | Player movement + HUD | ✅ Done |
-| Phase 3 | Procedural generation (cellular automata) | ✅ Done |
-| Phase 5 | Enemies + AI | ✅ Done |
-| Phase 6 | Combat system | 🔨 In Progress |
-| Phase 7 | Items + Inventory | 📋 Upcoming |
-| Phase 9 | Polish + title/game over screens | 📋 Later |
-| Phase 10 | GitHub + portfolio presentation | 📋 Later |
+### Town/Overworld (100×34)
+A hand-crafted town with:
+- **Inn** (top-left) — rest and recovery
+- **Town Hall** (top-right) — quests and lore
+- **Smithy** (bottom-left) — weapons and armor
+- **General Shop** (bottom-right) — consumables
+- **Fountain** — decorative centrepiece
+- **Cave entrance** leading to the dungeon
 
 ---
 
-## License
+## 🧱 Architecture
 
-MIT — free to use, fork, and learn from.
+```
+Main
+ └── Dungeon (implements MapLoop)
+      ├── DungeonMap (implements GameMap)
+      │    ├── Cellular automata generation
+      │    ├── Enemy spawning + scaling
+      │    └── Tile rendering
+      ├── Player (extends Entity)
+      │    ├── WASD movement
+      │    └── Class stats (Warrior / Rogue / Wizard)
+      └── Enemy (extends Entity)
+           └── EnemyAi() — radius-based chase + speed tiers
+```
+
+### Key Classes
+
+| Class | Responsibility |
+|-------|---------------|
+| `Entity` | Base class: hp, att, def, pos (px,py), next pos (nx,ny), random spawn |
+| `Player` | Extends Entity — input, movement, class system, ladder interaction |
+| `Enemy` | Extends Entity — `EnemyAi()`, speed, moveCounter, symbol, color |
+| `DungeonMap` | 2D tile array, cellular automata generation, enemy generation |
+| `Dungeon` | Game loop via `start(Player, Screen)` |
+| `Town` | Hand-crafted overworld map with its own loop |
+| `GameMap` | Interface — render, getTile, enemy management |
+| `MapLoop` | Interface — `start(Player, Screen)` |
+| `Tiles` | Enum — WALL, FLOOR, LADDER |
+
+### Design Decisions
+- **nx,ny next-position system** — collision is checked against the next position before committing the move, keeping movement logic clean
+- **DungeonMap is data only** — no game loop logic lives inside it; the `Dungeon` class owns the loop
+- **Entities rendered generically** — the renderer loops over `Entity` references; Player and Enemy are treated the same way
+- **ArrayList\<Enemy\>** with `Iterator` for safe removal of dead enemies during the game loop
+
+---
+
+## ⚔ Playable Classes
+
+| | Warrior | Rogue | Wizard |
+|---|---|---|---|
+| **Race** | Dwarf | Elf | Human |
+| **Weapon** | Axe | Dagger | Staff |
+| **HP** | 130 | 100 | 100 |
+| **Attack** | 12 | 10 | 18 |
+| **Defense** | 8 | 5 | 2 |
+| **Resource** | 🔥 Wrath | 💨 Speed | 💧 Mana |
+| **Defensive Skill** | Block | Dodge | Invisibility |
+| **Buff Skill** | Wrath | Focus | Meditate |
+| **Special** | Consumes Wrath | Consumes Speed | Consumes Mana |
+
+---
+
+## 👾 Enemies
+
+| Symbol | Name | HP | Attack | Defense | Color |
+|--------|------|----|--------|---------|-------|
+| `ρ` | Rat | 20 | 5 | 0 | Grey |
+| `ω` | Bat | 25 | 8 | 0 | Purple |
+| `Φ` | Goblin | 50 | 12 | 3 | Green |
+
+Enemy spawn counts scale per floor using multiplier arrays — Rats dominate early floors, Goblins take over in the deeper floors, and Floor 10 is reserved for a boss encounter.
+
+**AI behaviour:**
+- Within 15 tiles: enemy moves directly toward the player
+- Outside range: enemy wanders randomly on valid floor tiles
+- Each enemy has a `speed` field and `moveCounter` — faster enemies act more frequently per player turn
+
+---
+
+## 🗂 Project Structure
+
+```
+src/
+└── main/java/RougelikeRPG/
+    ├── Main.java          — Entry point
+    ├── Entity.java        — Base entity class
+    ├── Player.java        — Player logic + class system
+    ├── Enemy.java         — Enemy AI
+    ├── Dungeon.java       — Dungeon game loop
+    ├── DungeonMap.java    — Map generation + rendering
+    ├── Town.java          — Overworld map + loop
+    ├── GameMap.java       — Map interface
+    ├── MapLoop.java       — Loop interface
+    └── Tiles.java         — Tile enum
+```
+
+---
+
+## 🔮 Roadmap
+
+- [x] Procedural dungeon generation (cellular automata)
+- [x] Player movement + collision
+- [x] Multi-floor dungeon with ladder transitions
+- [x] Enemy spawning + radius-based AI
+- [x] Floor-scaled enemy difficulty
+- [x] Town/overworld map
+- [x] Playable class system (stats)
+- [ ] **Phase 6 — Combat system** ← current
+- [ ] Phase 7 — Items & Inventory
+- [ ] Phase 8 — Game State pattern (MainMenu, GameOver, Victory)
+- [ ] Phase 9 — Polish (FOV, colors, title screen, high score)
+- [ ] Phase 10 — Boss floor (Floor 10)
+
+---
+
+## 🛠 Tech Stack
+
+- **Language:** Java
+- **Terminal UI:** [Lanterna](https://github.com/mabe02/lanterna)
+- **Build:** Maven
+- **IDE:** IntelliJ IDEA
+- **Font:** JetBrains Mono (required for correct Unicode rendering)
+
+---
+
+## 📄 License
+
+MIT License — feel free to use, fork, and learn from this project.
