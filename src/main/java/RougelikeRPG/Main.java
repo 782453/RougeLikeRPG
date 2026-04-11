@@ -14,7 +14,9 @@ public class Main {
         Screen screen = new TerminalScreen(terminal);
         screen.startScreen();
 
-        Town town = new Town();
-        town.start(player, screen, new int[]{16,0});
+        //Town town = new Town();
+        //town.start(player, screen, new int[]{16,0});
+        Dungeon dungeon = new Dungeon();
+        dungeon.start(player, screen);
     }
 }

@@ -6,18 +6,23 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
+import com.googlecode.lanterna.screen.TerminalScreen;
+import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
+import com.googlecode.lanterna.terminal.Terminal;
 
 public class Dungeon implements MapLoop {
     private static int floor = 1;
     private static GameMap map;
     public void start(Player player, Screen screen) throws Exception {
         int gold = 1000;
+        boolean combat;
         GameMap map = new DungeonMap(floor);
         player.randomEntityLocation(map);
         map.enemySpawn(map, player); //spawn enemies
 
         boolean running = true;
         while (running) {
+            combat = false;
             screen.clear();
             TextGraphics g = screen.newTextGraphics();
             TerminalSize size = screen.getTerminalSize();
@@ -48,6 +53,13 @@ public class Dungeon implements MapLoop {
             running = player.movement(key,map,running); //Player move
             for (Enemy e : map.getEnemies()) { //Enemies move
                 e.EnemyAi(map, player);
+                combat = e.equals(player);
+                if (combat) {
+                    running = combat(e, player);
+                    Town town = new Town();
+                    town.start(player, screen, new int[]{16,50});
+                    break;
+                }
             }
             if(map.getTile(player.getP()[0], player.getP()[1]) ==  Tiles.LADDER.getSymbol()) {//new dungeon floor
                 floor++;
@@ -57,5 +69,8 @@ public class Dungeon implements MapLoop {
             }
         }
         screen.stopScreen();
+    }
+    public boolean combat(Enemy e, Player player) {
+        return false;
     }
 }
