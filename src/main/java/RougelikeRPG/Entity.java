@@ -74,6 +74,10 @@ public class Entity {
     public int getMaxHp() {
         return maxHP;
     }
+    public void heal(int h) {
+        this.hp += h;
+    }
+
     @Override
     public boolean equals(Object o) {
         return this.P[0] == ((Entity)o).getP()[0] && this.P[1] == ((Entity)o).getP()[1];

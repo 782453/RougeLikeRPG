@@ -44,4 +44,7 @@ public class Player extends Entity {
         }
         return running;
     }
+    public void incResource(int r) {
+        this.resource += r;
+    }
 }
