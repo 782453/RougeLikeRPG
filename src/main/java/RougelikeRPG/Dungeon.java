@@ -15,18 +15,19 @@ public class Dungeon implements MapLoop {
     private static GameMap map;
     public void start(Player player, Screen screen) throws Exception {
         int gold = 1000;
-        boolean combat;
         GameMap map = new DungeonMap(floor);
         player.randomEntityLocation(map);
         map.enemySpawn(map, player); //spawn enemies
+        boolean combat = false;
+        Combat combat_obj = new Combat();
 
         boolean running = true;
         while (running) {
-            combat = false;
             screen.clear();
             TextGraphics g = screen.newTextGraphics();
             TerminalSize size = screen.getTerminalSize();
 
+            combat = false;
             map.render(g); //draw map
 
             g.setForegroundColor(TextColor.ANSI.WHITE_BRIGHT);
@@ -55,10 +56,12 @@ public class Dungeon implements MapLoop {
                 e.EnemyAi(map, player);
                 combat = e.equals(player);
                 if (combat) {
-                    running = combat(e, player);
-                    Town town = new Town();
-                    town.start(player, screen, new int[]{16,50});
-                    break;
+                    running = combat_obj.combat(screen, e, player);
+                    if (!combat) {
+                        Town town = new Town();
+                        town.start(player, screen, new int[]{16,50});
+                        break;
+                    }
                 }
             }
             if(map.getTile(player.getP()[0], player.getP()[1]) ==  Tiles.LADDER.getSymbol()) {//new dungeon floor
@@ -69,8 +72,5 @@ public class Dungeon implements MapLoop {
             }
         }
         screen.stopScreen();
-    }
-    public boolean combat(Enemy e, Player player) {
-        return false;
     }
 }
