@@ -9,6 +9,7 @@ import com.googlecode.lanterna.screen.Screen;
 import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
+import java.util.Iterator;
 
 public class Dungeon implements MapLoop {
     private static int floor = 1;
@@ -18,6 +19,7 @@ public class Dungeon implements MapLoop {
         GameMap map = new DungeonMap(floor);
         player.randomEntityLocation(map);
         map.enemySpawn(map, player); //spawn enemies
+        Iterator<Enemy> it = map.getEnemies().iterator();
         boolean combat = false;
         Combat combat_obj = new Combat();
 
@@ -57,10 +59,13 @@ public class Dungeon implements MapLoop {
                 combat = e.equals(player);
                 if (combat) {
                     running = combat_obj.combat(screen, e, player);
-                    if (!combat) {
+                    if (!running) {
                         Town town = new Town();
                         town.start(player, screen, new int[]{16,50});
                         break;
+                    } else {
+                        it.remove();
+                        combat = false;
                     }
                 }
             }

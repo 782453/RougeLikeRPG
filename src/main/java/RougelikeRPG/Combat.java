@@ -10,7 +10,7 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 public class Combat {
-    public boolean combat(Screen screen, Enemy e, Player player) throws Exception{
+    public boolean combat(Screen screen, Enemy e, Player player) throws Exception {
         boolean running = true;
         while (running) {
             screen.clear();
@@ -18,12 +18,16 @@ public class Combat {
             TerminalSize size = screen.getTerminalSize();
 
 
-
             g.setForegroundColor(TextColor.ANSI.RED);
-            g.putString(0, size.getRows() - 1, String.format("HP:%d/%d  Gold:%d  Floor:%d  [WASD=move Q=quit]", player.getHp(), player.getMaxHp(), 1000, 1));
+            g.putString(0, size.getRows() - 1, String.format("HP:%d/%d  %s:%d/100   [ESC=escape]", player.getHp(), player.getMaxHp(), player.getResourceType(), player.getResource()));
 
             screen.refresh();
+            KeyStroke key = screen.readInput();
+            if (key.getKeyType() == KeyType.Escape) {
+                running = false;
+                break;
+            }
         }
-        return false;
+        return true;
     }
 }

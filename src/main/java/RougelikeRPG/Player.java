@@ -13,6 +13,7 @@ public class Player extends Entity {
     private String race;
     private String weapon;
     private String resource;
+    private int resourceInt;
     private String def_skill;
     private String buff_skill;
 
@@ -22,6 +23,7 @@ public class Player extends Entity {
         this.race = Classes[type][1];
         this.weapon =  Classes[type][2];
         this.resource = Classes[type][3];
+        this.resourceInt = 100;
         this.def_skill = Classes[type][4];
         this.buff_skill = Classes[type][5];
     }
@@ -43,6 +45,12 @@ public class Player extends Entity {
             this.setP(this.getN());
         }
         return running;
+    }
+    public String getResourceType() {
+        return this.resource;
+    }
+    public int getResource(){
+        return this.resourceInt;
     }
     public void incResource(int r) {
         this.resource += r;
