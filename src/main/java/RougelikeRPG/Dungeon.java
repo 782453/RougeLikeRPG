@@ -19,7 +19,6 @@ public class Dungeon implements MapLoop {
         GameMap map = new DungeonMap(floor);
         player.randomEntityLocation(map);
         map.enemySpawn(map, player); //spawn enemies
-        Iterator<Enemy> it = map.getEnemies().iterator();
         boolean combat = false;
         Combat combat_obj = new Combat();
 
@@ -54,10 +53,10 @@ public class Dungeon implements MapLoop {
                 break;
             }
             running = player.movement(key,map,running); //Player move
-            for (Enemy e : map.getEnemies()) { //Enemies move
-                e.EnemyAi(map, player);
-                combat = e.equals(player);
-                if (combat) {
+            Iterator<Enemy> it = map.getEnemies().iterator();
+            while (it.hasNext()) { //Enemies move
+                Enemy e = it.next();
+                if (e.equals(player)) {
                     running = combat_obj.combat(screen, e, player);
                     if (!running) {
                         Town town = new Town();
@@ -65,9 +64,9 @@ public class Dungeon implements MapLoop {
                         break;
                     } else {
                         it.remove();
-                        combat = false;
                     }
                 }
+                e.EnemyAi(map, player);
             }
             if(map.getTile(player.getP()[0], player.getP()[1]) ==  Tiles.LADDER.getSymbol()) {//new dungeon floor
                 floor++;
