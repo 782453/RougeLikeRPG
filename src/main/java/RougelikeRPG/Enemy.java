@@ -27,7 +27,7 @@ public class Enemy extends Entity {
                     else if(this.getP()[1] + 1 < map.getMapWidth()) this.setNx(this.getN()[1] + 1);
                 }
             }
-            while(map.getTile(this.getN()[0], this.getN()[1]) == Tiles.WALL.getSymbol());
+            while(map.getTile(this.getN()[0], this.getN()[1]) != Tiles.FLOOR.getSymbol());
             this.setP(this.getN());
         }
     }

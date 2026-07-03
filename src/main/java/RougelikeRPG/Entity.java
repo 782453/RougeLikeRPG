@@ -82,4 +82,7 @@ public class Entity {
     public boolean equals(Object o) {
         return this.P[0] == ((Entity)o).getP()[0] && this.P[1] == ((Entity)o).getP()[1];
     }
+    public void changeHp(int hp) {
+        this.hp += hp;
+    }
 }
