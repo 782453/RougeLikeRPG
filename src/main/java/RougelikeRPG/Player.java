@@ -53,7 +53,8 @@ public class Player extends Entity {
         return this.resourceInt;
     }
     public void incResource(int r) {
-        this.resource += r;
+        if(this.resourceInt + r > 100) this.resourceInt = 100;
+        else this.resourceInt += r;
     }
     public String getType() {return this.type;}
 }

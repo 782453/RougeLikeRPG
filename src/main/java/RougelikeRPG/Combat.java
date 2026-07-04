@@ -26,30 +26,29 @@ public class Combat {
             g.putString(0, size.getRows() - 1, String.format("HP:%d/%d  %s:%d/100   [ESC=escape]", player.getHp(), player.getMaxHp(), player.getResourceType(), player.getResource()));
 
             screen.refresh();
-            KeyStroke key = screen.readInput();
-            if (key.getKeyType() == KeyType.Character) {//player turn
-                char c = key.getCharacter();
-                switch (c) {
-                    case 'a':
-                        Attack(player, e, 0);
-                        break;
-                    case 'p':
-                        break;
-                    case 'b':
-                        break;
-                    case 'f':
-                        running = false;
-                        break;
-                }
-
+            KeyStroke key = screen.readInput();//player turn
+            while(key.getKeyType() != KeyType.Character || (key.getCharacter() != 'a' &&  key.getCharacter() != 'p'
+                    && key.getCharacter() != 'b' && key.getCharacter() != 'f')) key = screen.readInput();
+            char c = key.getCharacter();
+            switch (c) {
+                case 'a':
+                    Attack(player, e, 0);
+                    break;
+                case 'p':
+                    break;
+                case 'b':
+                    break;
+                case 'f':
+                    running = false;
+                    break;
             }
             int resourceGain = 6 + (int)(Math.random() * 7);
             if(e.getHp()<=0) {
-                player.incResource(resourceGain + 10 + (int)(Math.random() * 11));
+                player.incResource(resourceGain + 10 + (int)(Math.random() * 11));//enemy dies
                 return true;
             } else player.incResource(resourceGain);
             Attack(player, e, 1);//enemy attack
-            if(player.getHp()<=0) return false;
+            if(player.getHp()<=0) return false;//player dies
         }
         return true;
     }
@@ -80,7 +79,6 @@ public class Combat {
         }
     }
     public void Attack(Player p, Enemy e, int i) {
-        //int damage = attacker.att - defender.def + random(1, 6)
         if (i==0) {//player attack
             int damage = p.getAtt() - e.getDef() + (int) (Math.random() * 6);
             e.changeHp(-damage);
