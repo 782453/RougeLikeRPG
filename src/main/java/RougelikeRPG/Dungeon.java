@@ -61,6 +61,7 @@ public class Dungeon implements MapLoop {
                     //running = Combat.combat(screen, e, player);
                     running = combat_obj.combat(screen, e, player);
                     if (!running) {
+                        player.changeHp(-999);
                         Town town = new Town();
                         town.start(player, screen, new int[]{16,50});
                         break;
