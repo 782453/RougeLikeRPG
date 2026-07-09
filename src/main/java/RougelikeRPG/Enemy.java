@@ -1,8 +1,10 @@
 package RougelikeRPG;
 
 public class Enemy extends Entity {
-    public Enemy(String name, int hp, int att, int def) {
+    private String battleLine;
+    public Enemy(String name, int hp, int att, int def, String battleLine) {
         super(name, hp, hp, att, def);
+        this.battleLine = battleLine;
     }
     public void EnemyAi(GameMap map, Player player) {
         if(Math.sqrt(Math.pow(this.getP()[0]-player.getP()[0], 2) + Math.pow(this.getP()[1]-player.getP()[1], 2)) <= 15){
@@ -30,5 +32,8 @@ public class Enemy extends Entity {
             while(map.getTile(this.getN()[0], this.getN()[1]) != Tiles.FLOOR.getSymbol());
             this.setP(this.getN());
         }
+    }
+    public String getBattleLine() {
+        return this.battleLine;
     }
 }

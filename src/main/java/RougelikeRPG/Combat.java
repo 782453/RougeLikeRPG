@@ -35,10 +35,18 @@ public class Combat {
                     Attack(player, e, 0);
                     break;
                 case 'p':
+                    Potion(player);
+                    break;
+                case 's':
+                    //TODO: manage resource attack
+                    Special(player, e);
                     break;
                 case 'b':
+                    //TODO: manage resource buff
+                    Buff(player);
                     break;
                 case 'f':
+                    //TODO: figure out the flee option
                     running = false;
                     break;
             }
@@ -67,10 +75,10 @@ public class Combat {
                 "║      / \\                                    ║".toCharArray(),
                 "║                                             ║".toCharArray(),
                 "╠═════════════════════════════════════════════╣".toCharArray(),
-                "║  > A Rat blocks your path!                  ║".toCharArray(),
+                e.getBattleLine().toCharArray(),
                 "╠═════════════════════════════════════════════╣".toCharArray(),
-                "║   [A] Attack   [P] Potion   [B] Buff        ║".toCharArray(),
-                "║   [F] Flee                                  ║".toCharArray(),
+                "║   [A] Attack   [P] Potion   [S] Special     ║".toCharArray(),
+                "║   [B] Buff     [F] Flee                     ║".toCharArray(),
                 "╚═════════════════════════════════════════════╝".toCharArray()};
         for (int row = 8; row < ROWS + 8; row++) {
             for (int col = 26; col < COLS + 26; col++) {
@@ -88,6 +96,9 @@ public class Combat {
         }
     }
     public void Potion(Player p) {
+
+    }
+    public void Special(Player p, Enemy e) {
 
     }
     public void Buff(Player p) {

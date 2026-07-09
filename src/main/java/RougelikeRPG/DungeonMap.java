@@ -15,9 +15,9 @@ public class DungeonMap implements GameMap {
     private static final int NEIGHBOR_THRESHOLD = 5;
     private static final int MIN_REGION_SIZE = 40;
     private static final String[][] enemy_type = {
-            {"Rat", "20", "5", "0"},
-            {"Bat", "25", "8", "0"},
-            {"Goblin", "50", "12", "3"}
+            {"Rat", "20", "5", "0", "║  > A Rat blocks your path!                  ║"},
+            {"Bat", "25", "8", "0", "║  > A Bat tries to bite you!                 ║"},
+            {"Goblin", "50", "12", "3", "║  > A Goblin charges at you!                 ║"}
     };
     private ArrayList<Enemy> enemies = new ArrayList<>();
     public DungeonMap(int floor) {
@@ -287,7 +287,8 @@ public class DungeonMap implements GameMap {
             Enemy rat = new Enemy(enemy_type[0][0],
                     Integer.parseInt(enemy_type[0][1]),
                     Integer.parseInt(enemy_type[0][2]),
-                    Integer.parseInt(enemy_type[0][3]));
+                    Integer.parseInt(enemy_type[0][3]),
+                    enemy_type[0][4]);
             rat.setSymbol('\u04A8');
             rat.setColor("140,140,140");
             enemies.add(rat);
@@ -296,7 +297,8 @@ public class DungeonMap implements GameMap {
             Enemy bat = new Enemy(enemy_type[1][0],
                     Integer.parseInt(enemy_type[1][1]),
                     Integer.parseInt(enemy_type[1][2]),
-                    Integer.parseInt(enemy_type[1][3]));
+                    Integer.parseInt(enemy_type[1][3]),
+                    enemy_type[1][4]);
             bat.setSymbol('\u03C9');
             bat.setColor("180,100,255");
             enemies.add(bat);
@@ -305,7 +307,8 @@ public class DungeonMap implements GameMap {
             Enemy goblin = new Enemy(enemy_type[2][0],
                     Integer.parseInt(enemy_type[2][1]),
                     Integer.parseInt(enemy_type[2][2]),
-                    Integer.parseInt(enemy_type[2][3]));
+                    Integer.parseInt(enemy_type[2][3]),
+                    enemy_type[2][4]);
             goblin.setSymbol('\u03A6');
             goblin.setColor("80,200,80");
             enemies.add(goblin);
