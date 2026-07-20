@@ -64,7 +64,7 @@ public class Dungeon implements MapLoop {
                     }
                 }
             }
-            if(map.getTile(player.getP()[0], player.getP()[1]) ==  Tiles.LADDER.getSymbol()) {//new dungeon floor
+            if(map.getTile(player.getP()[0], player.getP()[1]) ==  Tiles.LADDER.getSymbol() && map.getEnemies().isEmpty()) {//new dungeon floor
                 floor++;
                 map = new DungeonMap(floor);
                 player.randomEntityLocation(map);

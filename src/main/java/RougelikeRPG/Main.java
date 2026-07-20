@@ -16,8 +16,8 @@ public class Main {
         screen.startScreen();
 
         //TODO: use a file for the player location
-        Town town = new Town();
-        town.start(player, screen, new int[]{16,0});
+        //Town town = new Town();
+        //town.start(player, screen, new int[]{16,0});
 
         //TODO: change dungeon when completed the map
         Dungeon dungeon = new Dungeon();

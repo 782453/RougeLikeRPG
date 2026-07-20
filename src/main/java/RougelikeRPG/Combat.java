@@ -8,17 +8,18 @@ import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
 
 public class Combat {
-    private static final int ROWS = 18;
+    private static final int ROWS = 20;
     private static final int COLS = 47;
     private char[][] battle;
     public boolean combat(Screen screen, Enemy e, Player player) throws Exception {
         boolean running = true;
+        int[] damage = {0,0};
         while (running) {
             screen.clear();
             TextGraphics g = screen.newTextGraphics();
             TerminalSize size = screen.getTerminalSize();
 
-            this.render(g, player, e);
+            this.render(g, player, e, damage);
 
             g.setForegroundColor(TextColor.ANSI.RED);
             g.putString(0, size.getRows() - 1, String.format("HP:%d/%d  %s:%d/100   [ESC=escape]", player.getHp(), player.getMaxHp(), player.getResourceType(), player.getResource()));
@@ -30,7 +31,7 @@ public class Combat {
             char c = key.getCharacter();
             switch (c) {
                 case 'a':
-                    Attack(player, e, 0);
+                    damage[0] = Attack(player, e, 0); //player attack
                     break;
                 case 'p':
                     Potion(player);
@@ -53,12 +54,16 @@ public class Combat {
                 player.incResource(resourceGain + 10 + (int)(Math.random() * 11));//enemy dies
                 return true;
             } else player.incResource(resourceGain);
-            Attack(player, e, 1);//enemy attack
+            damage[1] = Attack(player, e, 1);//enemy attack
             if(player.getHp()<=0) return false;//player dies
         }
         return true;
     }
-    public void render(TextGraphics g, Player p, Enemy e) {
+    public void render(TextGraphics g, Player p, Enemy e, int[] damage) {
+        String pla = "║                                             ║";
+        String ene = pla;
+        if(damage[0] != 0) pla = String.format("║  > Player attack for %3d damage             ║",  damage[0]);
+        if(damage[1] != 0) ene = String.format("║  > Enemy attack for %3d damage              ║",  damage[1]);
         this.battle = new char[][]{
                 "╔═════════════════════════════════════════════╗".toCharArray(),
                 "║                ⚔  COMBAT  ⚔                 ║".toCharArray(),
@@ -72,6 +77,8 @@ public class Combat {
                 "║       |                                     ║".toCharArray(),
                 "║      / \\                                    ║".toCharArray(),
                 "║                                             ║".toCharArray(),
+                pla.toCharArray(),
+                ene.toCharArray(),
                 "╠═════════════════════════════════════════════╣".toCharArray(),
                 e.getBattleLine().toCharArray(),
                 "╠═════════════════════════════════════════════╣".toCharArray(),
@@ -84,14 +91,16 @@ public class Combat {
             }
         }
     }
-    public void Attack(Player p, Enemy e, int i) {
+    public int Attack(Player p, Enemy e, int i) {
+        int damage = 0;
         if (i==0) {//player attack
-            int damage = p.getAtt() - e.getDef() + (int) (Math.random() * 6);
+            damage = p.getAtt() - e.getDef() + (int) (Math.random() * 6);
             e.changeHp(-damage);
         } else {//enemy attack
-            int damage = e.getAtt() - p.getDef() + (int) (Math.random() * 8);
+            damage = e.getAtt() - p.getDef() + (int) (Math.random() * 8);
             p.changeHp(-damage);
         }
+        return damage;
     }
     public void Potion(Player p) {
 
