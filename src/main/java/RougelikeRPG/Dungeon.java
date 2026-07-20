@@ -6,9 +6,6 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.input.KeyStroke;
 import com.googlecode.lanterna.input.KeyType;
 import com.googlecode.lanterna.screen.Screen;
-import com.googlecode.lanterna.screen.TerminalScreen;
-import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
-import com.googlecode.lanterna.terminal.Terminal;
 import java.util.Iterator;
 
 public class Dungeon implements MapLoop {
@@ -19,8 +16,7 @@ public class Dungeon implements MapLoop {
         GameMap map = new DungeonMap(floor);
         player.randomEntityLocation(map);
         map.enemySpawn(map, player); //spawn enemies
-        boolean combat = false;
-        Combat combat_obj = new Combat();
+        Combat combat = new Combat();
 
         boolean running = true;
         while (running) {
@@ -28,7 +24,6 @@ public class Dungeon implements MapLoop {
             TextGraphics g = screen.newTextGraphics();
             TerminalSize size = screen.getTerminalSize();
 
-            combat = false;
             map.render(g); //draw map
 
             g.setForegroundColor(TextColor.ANSI.WHITE_BRIGHT);
@@ -58,8 +53,7 @@ public class Dungeon implements MapLoop {
                 Enemy e = it.next();
                 e.EnemyAi(map, player);
                 if (e.equals(player)) {
-                    //running = Combat.combat(screen, e, player);
-                    running = combat_obj.combat(screen, e, player);
+                    running = combat.combat(screen, e, player);
                     if (!running) {
                         player.changeHp(-999);
                         Town town = new Town();

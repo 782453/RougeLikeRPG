@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Town implements GameMap{
     private // 34 rows x 100 cols
-    char[][] map = {
+    final char[][] map = {
             "████████████████████████████≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈█████████████████████████████████████████".toCharArray(), // 0
             "█♣♣♣,╔╗╔╗,,,,,,,,,,,,,,,♣♣♣♣≈≈≈≈≈≈≈≈≈≈≈≈≈≈≈♣♣|░|,,≈≈≈≈≈≈≈,,,,,,,,,║★──,,,,,,,,,,,,,,,,♣♣♣♣,,,,,,,,,█".toCharArray(), // 1
             "█,╔══╝╚╝╚═════════════╗,,♣♣≈≈≈≈≈≈≈≈≈≈≈≈≈≈♣≈♣,|░|,╔══════════════════════════════════╗,♣♣♣,,,,,♣♣♣♣,█".toCharArray(), // 2
@@ -47,11 +47,13 @@ public class Town implements GameMap{
     };
     private static final int ROWS = 34;
     private static final int COLS = 100;
-    private static final String[][] enemy_type = {
+    //TODO: NPC
+    /**private static final String[][] enemy_type = {
             {"Rat", "20", "5", "0"},
             {"Bat", "25", "8", "0"},
             {"Goblin", "50", "12", "3"}
     };
+     */
     private ArrayList<Enemy> enemies = new ArrayList<>();
     public char getTile(int i, int j) {
         return map[i][j];
