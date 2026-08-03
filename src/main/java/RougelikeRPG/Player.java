@@ -7,7 +7,7 @@ public class Player extends Entity {
     private static final String[][] Classes = {
             {"Warrior", "Dwarf", "Axe", "Wrath", "Block", "Rage", "130", "12", "8"},
             {"Rouge", "Elf", "Dagger", "Speed", "Dodge", "Focus", "100", "10", "5"},
-            {"Wizard", "Human", "Staff", "Mana", "Invisibility", "Meditate","100", "18", "2"}
+            {"Wizard", "Human", "Staff", "Mana", "Invisibility", "Meditate","100", "15", "2"}
     };
     private String type;
     private String race;
@@ -54,6 +54,7 @@ public class Player extends Entity {
     }
     public void incResource(int r) {
         if(this.resourceInt + r > 100) this.resourceInt = 100;
+        else if(this.resourceInt + r < 0) this.resourceInt = 0;
         else this.resourceInt += r;
     }
     public String getType() {return this.type;}

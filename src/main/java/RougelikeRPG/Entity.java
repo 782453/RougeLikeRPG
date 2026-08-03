@@ -26,19 +26,19 @@ public class Entity {
         return name;
     }
     public int getHp() {
-        return hp;
+        return this.hp;
     }
     public int getAtt() {
-        return att;
+        return this.att;
     }
     public int getDef() {
-        return def;
+        return this.def;
     }
     public int[] getP() {
-        return P;
+        return this.P;
     }
     public int[] getN() {
-        return N;
+        return this.N;
     }
     public void setNx(int Nx) {
         this.N[1] = Nx;
@@ -80,6 +80,7 @@ public class Entity {
     }
     public void changeHp(int hp) {
         if(hp == -999) this.hp = this.maxHP;
+        else if(this.hp + hp > this.maxHP) this.hp = this.maxHP;
         else this.hp += hp;
     }
 }

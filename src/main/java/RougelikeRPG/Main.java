@@ -8,7 +8,7 @@ import com.googlecode.lanterna.terminal.Terminal;
 
 public class Main {
     //TODO: use a file to load a player
-    static Player player = new Player("TEST_PLAYER", 1);
+    static Player player = new Player("TEST_PLAYER", 0);
     static String location = "town";
     public static void main(String[] args) throws Exception {
         Terminal terminal = new DefaultTerminalFactory().setInitialTerminalSize(new TerminalSize(100, 35)).createTerminal();
